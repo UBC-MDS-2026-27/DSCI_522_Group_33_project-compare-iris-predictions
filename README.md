@@ -23,7 +23,7 @@ You could follow the steps to reproduce the analysis.
 - run the following commands in your Git Bash terminal
 1. cd yourfolder
 2. git clone https://github.com/UBC-MDS-2026-27/DSCI_522_Group_33_project-compare-iris-predictions.git
-3. cd DSCI-522-Group-33
+3. cd DSCI_522_Group_33_project-compare-iris-predictions
 4. uv sync
 5. uv run quarto render analysis/predict-iris-classification.qmd --to html
 6. analysis/predict-iris-classification.html
