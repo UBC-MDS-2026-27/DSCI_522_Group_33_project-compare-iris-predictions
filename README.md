@@ -22,7 +22,7 @@ You could follow the steps to reproduce the analysis.
 
 - run the following commands in your Git Bash terminal
 1. cd yourfolder
-2. git clone https://github.com/UBC-MDS-2026-27/DSCI-522-Group-33.git
+2. git clone https://github.com/UBC-MDS-2026-27/DSCI_522_Group_33_project-compare-iris-predictions.git
 3. cd DSCI-522-Group-33
 4. uv sync
 5. uv run quarto render analysis/predict-iris-classification.qmd --to html
@@ -50,7 +50,7 @@ code. For the Methods section of our report, we used Anthropic Claude Opus 5.5 t
 No system files or CLAUDE.md files were used.
 
 # GitHub URL
-https://github.com/UBC-MDS-2026-27/DSCI-522-Group-33.git
+https://github.com/UBC-MDS-2026-27/DSCI_522_Group_33_project-compare-iris-predictions.git
 
 
 
