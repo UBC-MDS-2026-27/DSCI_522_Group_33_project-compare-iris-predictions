@@ -10,6 +10,7 @@ import os
 import zipfile
 import pandas as pd
 import requests
+import altair as alt
 
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.preprocessing import StandardScaler 
@@ -155,6 +156,70 @@ petal_model = fit_species_model(petal_preprocessor)
 ```
 
 # Results
+
+### Exploratory data analysis
+
+In the training data, the three species have similar sepal widths but differ more clearly in sepal length, and they differ strongly in both petal length and petal width. Setosa has much smaller petals than the other two species, while versicolor and virginica overlap more.
+
+```{python}
+# summarize each measurement by species (training data only):
+# mean, with standard deviation in brackets
+measurement_labels = {
+    "sepal_length_cm": "Sepal length (cm)",
+    "sepal_width_cm": "Sepal width (cm)",
+    "petal_length_cm": "Petal length (cm)",
+    "petal_width_cm": "Petal width (cm)",
+}
+
+species_groups = iris_train.groupby("species")
+means = species_groups.mean().map("{:.2f}".format)
+sds = species_groups.std().map("{:.2f}".format)
+
+train_summary = (
+    (means + " (" + sds + ")")
+    .rename(columns=measurement_labels)
+    .assign(**{"Number of flowers": species_groups.size()})
+    .rename_axis("Species")
+)
+train_summary
+```
+
+Table 1: Mean (standard deviation) of each measurement by species in the training data.
+
+In the petal plot, the three species form fairly distinct clusters, with setosa clearly separated and only a small overlap between versicolor and virginica. In the sepal plot, setosa is still distinct, but versicolor and virginica overlap substantially. This suggests the petal measurements may predict species better than the sepal measurements, which is what our models try to answer directly.
+
+```{python}
+# scatter plot of two measurements in the training data, coloured by species
+def species_scatter(x, y, x_title, y_title, title):
+    return alt.Chart(iris_train, title=title).mark_point(
+        filled=True, size=60, opacity=0.6  # transparency shows overlapping flowers
+    ).encode(
+        x=alt.X(x, type="quantitative", title=x_title).scale(zero=False),
+        y=alt.Y(y, type="quantitative", title=y_title).scale(zero=False),
+        color=alt.Color("species", type="nominal", title="Species"),
+        shape=alt.Shape("species", type="nominal", title="Species"),
+        tooltip=["species", x, y],
+    ).properties(width=450, height=250)
+
+sepal_plot = species_scatter(
+    "sepal_length_cm", "sepal_width_cm",
+    "Sepal length (cm)", "Sepal width (cm)", "Sepal measurements",
+)
+petal_plot = species_scatter(
+    "petal_length_cm", "petal_width_cm",
+    "Petal length (cm)", "Petal width (cm)", "Petal measurements",
+)
+
+(sepal_plot & petal_plot).configure_axis(
+    labelFontSize=12, titleFontSize=14
+).configure_legend(
+    labelFontSize=12, titleFontSize=14
+).configure_title(
+    fontSize=16
+)
+```
+
+Figure 1: Sepal measurements (left) and petal measurements (right) of the flowers in the training data, coloured by species.
 
 # Discussion
 
