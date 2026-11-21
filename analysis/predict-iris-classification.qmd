@@ -24,18 +24,18 @@ jupyter: python3
 # Discussion
 
 - As we can see that, the petal model classify the Iris species more accurately than the sepal model. Since the petal model has 96.7 % 
-test accuracy which is better than 76.7% test accuracy for the sepal model. Also, the confusion matrix shows that both models classfy 
+test accuracy which is better than 76.7% test accuracy for the sepal model. Also, the confusion matrix shows that both models classify 
 the Iris Setosa correctly. The petal model has only 1 incorrect prediction of Iris Virginica，while sepal model has 7 incorrect prediction
 of Iris Versicolour and Iris Virginica.
 - Our result can enable scientists and even other people to know that in cases where measurement conditions are limited, and people 
 wants to quickly classfy the types of iris, measuring petal is more useful than measuring sepal. Also, it can save time and costs 
 for researchers.
 - Our finding meet what we expected to find, petal is more accurate than sepal.
-- There are still many limitaiton in our research. Firstly, the dataset is quit small which only contains 150 Iris(50 for each of 3 Iris). 
-The small size of data may cause the model to be inaccurate for other unknown Iris. Secondly, we could also try other model bu not only 
-using Logistic Regression. If we try other model on the same data, we may have diferent result.
-- Our finding may influence the steps and priorities that scientists choose for measurement before conducting experiments.
+- There are still many limitations in our research. Firstly, the dataset is quite small and only contains 150 Iris (50 for each of 3 Iris). 
+The small size of data may cause the model to be inaccurate for the other unknown Iris. Secondly, we could also try other model but not only 
+using Logistic Regression. If we try other model on the same data, we may have different results.
+- Our finding may influence the steps and priorities that scientists choose for measurements before conducting experiments.
 - There are some future questions this research could lead to. Is Logistic Regression the best predictive model? 
-Can the accuracy be further improved by using other models? Besides petal and sepal, what other features can be used to classfy Iris?
+Can the accuracy be further improved by using another model? Besides petal and sepal, what other features can be used to classify Iris?
 
 # References
