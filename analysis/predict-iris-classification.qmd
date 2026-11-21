@@ -1,0 +1,26 @@
+---
+title: "Predicting Iris species from flower information"
+author: "Ramandeep Kaur, Peter Kim, Jiaqi Feng, Carine Ishimwe"
+date: "2026/11/20"
+jupyter: python3
+---
+
+```{python}
+
+```
+
+# Summary
+
+# Introduction
+
+# Methods
+
+## Data
+
+## Analysis
+
+# Results
+
+# Discussion
+
+# References
