@@ -33,8 +33,8 @@ an accuracy of 96.7%, the sepal model had an accuracy of 76.7%. Petal
 measurements separated the species much more clearly, while the sepal model 
 often confused *Iris versicolor* with *Iris virginica*. Knowing which measurements 
 carry the most information is useful in practice, because if one set is enough, 
-researchers working in the field could measure fewer features per plant without losing accuracy. Our results have some limitations. The data set is small, and with only 45 flowers
-in the test set, a single misclassification changes the accuracy by about two
+researchers working in the field could measure fewer features per plant without losing accuracy. Our results have some limitations. The data set is small, and with only 30 flowers
+in the test set, a single misclassification changes the accuracy by about 3.3
 percentage points. We also tested only one type of model and three species, so
 our findings may not hold for other models or other irises.
 
