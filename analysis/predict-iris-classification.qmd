@@ -35,9 +35,7 @@ measurements separated the species much more clearly, while the sepal model
 often confused *Iris versicolor* with *Iris virginica*. Knowing which measurements 
 carry the most information is useful in practice, because if one set is enough, 
 researchers working in the field could measure fewer features per plant without losing accuracy. Our results have some limitations. The data set is small, and with only 30 flowers
-in the test set, a single misclassification changes the accuracy by about 3.3
-percentage points. We also tested only one type of model and three species, so
-our findings may not hold for other models or other irises.
+in the test set, a single misclassification changes the accuracy by about 3.3%. We also tested only one type of model and three species, so our findings may not hold for other models or other irises.
 
 # Introduction
 
@@ -55,7 +53,7 @@ each flower.](img/iris_species.png){#fig-iris-species width=90%}
 
 The data we used has a long history. In the 1930s, the botanist Edgar Anderson
 measured the sepals and petals of irises to study how closely related species
-differ from one another (Anderson, 1935). Two of the three species in the data
+differ from one another. Two of the three species in the data
 were collected on the Gaspé Peninsula in Quebec. The statistician Ronald Fisher
 then used Anderson's measurements to demonstrate a new method for sorting
 observations into groups based on several measurements at once (Fisher, 1936).
@@ -370,3 +368,10 @@ There are some future questions this research could lead to. Is Logistic Regress
 
 # References
 
+Anand. (2024, May 28). ML intro : Iris dataset. DEV Community. https://dev.to/kammarianand/ml-intro-iris-dataset-4e13
+
+Bezdek, J. C., Keller, J. M., Krishnapuram, R., Kuncheva, L. I., & Pal, N. R. (1999). Will the real iris data please stand up? IEEE Transactions on Fuzzy Systems, 7(3), 368-369. https://doi.org/10.1109/91.771092
+
+Fisher, R. (1936). Iris [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C56C76.
+
+Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel, O., Blondel, M., Prettenhofer, P., Weiss, R., Dubourg, V., Vanderplas, J., Passos, A., Cournapeau, D., Brucher, M., Perrot, M., & Duchesnay, E. (2011). Scikit-learn: Machine learning in Python. Journal of Machine Learning Research, 12, 2825–2830.
