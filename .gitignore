@@ -9,3 +9,5 @@
 # Quarto render output
 **/*_files/
 **/.quarto/
+
+.Rhistory
