@@ -16,6 +16,8 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.compose import make_column_transformer
 from sklearn.pipeline import make_pipeline
 from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, confusion_matrix
+from IPython.display import display
 ```
 
 # Summary
@@ -154,21 +156,23 @@ sepal_model = fit_species_model(sepal_preprocessor)
 petal_model = fit_species_model(petal_preprocessor)
 ```
 
-# Results
-```{python}
-from sklearn.metrics import accuracy_score, confusion_matrix
-from IPython.display import display
 
+# Results
+
+```{python}
 species_order = ["setosa", "versicolor", "virginica"]
+
 models = {
     "Sepal measurements": sepal_model,
     "Petal measurements": petal_model,
 }
 
 results = []
+confusion_matrices = {}
 
 for name, model in models.items():
     predictions = model.predict(X_test)
+
     results.append({
         "Feature set": name,
         "Best C": model.best_params_["logisticregression__C"],
@@ -176,17 +180,45 @@ for name, model in models.items():
         "Test accuracy": accuracy_score(y_test, predictions),
     })
 
-    matrix = confusion_matrix(y_test, predictions, labels=species_order)
-    matrix_df = pd.DataFrame(
+    matrix = confusion_matrix(
+        y_test,
+        predictions,
+        labels=species_order,
+    )
+
+    confusion_matrices[name] = pd.DataFrame(
         matrix,
         index=[f"Actual {species}" for species in species_order],
         columns=[f"Predicted {species}" for species in species_order],
     )
-    print(f"{name} confusion matrix")
-    display(matrix_df)
 
-display(pd.DataFrame(results).round(3))
+results_df = pd.DataFrame(results).round(3)
 ```
+The petal model performed better than the sepal model on this test split (Table 1). It correctly classified 29 of 30 flowers, compared with 23 of 30 for the sepal model. The confusion matrices show which species were misclassified (Tables 2 and 3).
+
+**Table 1. Cross-validation and test accuracy by feature set**
+
+| Feature set | Best C | Mean CV accuracy | Test accuracy |
+|---|---:|---:|---:|
+| Sepal measurements | 1 | 0.833 | 0.767 |
+| Petal measurements | 10 | 0.958 | 0.967 |
+
+**Table 2. Sepal model confusion matrix**
+
+| Actual speScies | Predicted setosa | Predicted versicolor | Predicted virginica |
+|---|---:|---:|---:|
+| setosa | 10 | 0 | 0 |
+| versicolor | 0 | 6 | 4 |
+| virginica | 0 | 3 | 7 |
+
+**Table 3. Petal model confusion matrix**
+
+| Actual species | Predicted setosa | Predicted versicolor | Predicted virginica |
+|---|---:|---:|---:|
+| setosa | 10 | 0 | 0 |
+| versicolor | 0 | 10 | 0 |
+| virginica | 0 | 1 | 9 |
+
 # Discussion
 
 # References
