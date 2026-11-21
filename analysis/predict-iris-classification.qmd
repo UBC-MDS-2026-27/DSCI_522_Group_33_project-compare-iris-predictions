@@ -17,11 +17,86 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.compose import make_column_transformer
 from sklearn.pipeline import make_pipeline
 from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, confusion_matrix
+from IPython.display import display
 ```
 
 # Summary
 
+Can the species of an iris flower be identified from its petals alone, or from
+its sepals alone? In this project we compared how well these two sets of
+measurements predict species. Using the Iris data set, which contains
+measurements of 150 flowers from three species, we trained two logistic
+regression models that were identical except for their features: one used only
+sepal length and width, and the other used only petal length and width. We
+compared the two models and found that on the test set, the petal model had 
+an accuracy of 96.7%, the sepal model had an accuracy of 76.7%. Petal 
+measurements separated the species much more clearly, while the sepal model 
+often confused *Iris versicolor* with *Iris virginica*. Knowing which measurements 
+carry the most information is useful in practice, because if one set is enough, 
+researchers working in the field could measure fewer features per plant without losing accuracy. Our results have some limitations. The data set is small, and with only 45 flowers
+in the test set, a single misclassification changes the accuracy by about two
+percentage points. We also tested only one type of model and three species, so
+our findings may not hold for other models or other irises.
+
 # Introduction
+
+Irises are flowering plants found across the Northern Hemisphere, with hundreds
+of species, some of which are hard to tell apart. Like many flowers, an iris has
+two main types of floral parts (@fig-iris-species). The sepals are the outer
+parts; in irises they are large and hang downward, which is why gardeners call
+them "falls". The petals are the inner parts, which usually stand upright and
+are called "standards". Botanists often distinguish similar species by the size
+and shape of parts like these, and because they can be measured with a ruler,
+they offer a simple and objective way to describe a flower.
+
+![The three iris species in the data set, with a petal and a sepal labelled on
+each flower.](img/iris_species.png){#fig-iris-species width=90%}
+
+The data we used has a long history. In the 1930s, the botanist Edgar Anderson
+measured the sepals and petals of irises to study how closely related species
+differ from one another (Anderson, 1935). Two of the three species in the data
+were collected on the Gaspé Peninsula in Quebec. The statistician Ronald Fisher
+then used Anderson's measurements to demonstrate a new method for sorting
+observations into groups based on several measurements at once (Fisher, 1936).
+Since then, the data set has become one of the most widely used examples in
+statistics and machine learning, and it is often one of the first data sets
+people meet when learning about classification.
+
+The question of which measurements matter most is worth answering for several
+reasons. Some iris species look very similar; *Iris versicolor* and
+*Iris virginica* in particular can be hard to tell apart by eye, so
+measurements can make identification more reliable. At the same time,
+measuring flowers takes time, especially when a researcher has many plants to
+measure in the field. If one part of the flower is enough to identify the
+species, the other measurements could be skipped, making data collection faster
+without losing accuracy. The question also reflects a common problem in data
+science: knowing which features carry the most information. A model with fewer,
+more informative features is simpler, easier to explain and less likely to
+overfit, which matters especially on a small data set. The Iris data is well
+suited to studying this, because its features fall naturally into two groups
+that can be compared fairly.
+
+The question we are trying to answer is: **Are sepal measurements or petal
+measurements better for predicting the species of an iris flower?**
+
+To answer this question, we used the Iris data set from the University of
+California, Irvine (UCI) Machine Learning Repository (Fisher, 1988). Each row
+represents one iris flower. There are 150 flowers in total, 50 from each of
+three species: *Iris setosa*, *Iris versicolor* and *Iris virginica*. Each
+flower has four measurements, all recorded in centimetres: sepal length, sepal
+width, petal length and petal width. We split these into two groups: the sepal
+measurements (sepal length and sepal width) and the petal measurements (petal
+length and petal width).
+
+The target variable is the species of each flower. It is a categorical variable
+with three possible values (*setosa*, *versicolor* or *virginica*), which makes
+this a classification problem. The data can answer our question because every
+flower has both sepal and petal measurements as well as a known species. This
+means we can train one model on the sepal measurements only and another on the
+petal measurements only, keep everything else the same, and compare how well
+each predicts the species of flowers it has not seen before, as well as how
+large the difference between them is.
 
 # Methods
 
@@ -155,6 +230,7 @@ sepal_model = fit_species_model(sepal_preprocessor)
 petal_model = fit_species_model(petal_preprocessor)
 ```
 
+
 # Results
 
 ### Exploratory data analysis
@@ -220,7 +296,77 @@ petal_plot = species_scatter(
 ```
 
 Figure 1: Sepal measurements (left) and petal measurements (right) of the flowers in the training data, coloured by species.
+```{python}
+species_order = ["setosa", "versicolor", "virginica"]
+
+models = {
+    "Sepal measurements": sepal_model,
+    "Petal measurements": petal_model,
+}
+
+results = []
+confusion_matrices = {}
+
+for name, model in models.items():
+    predictions = model.predict(X_test)
+
+    results.append({
+        "Feature set": name,
+        "Best C": model.best_params_["logisticregression__C"],
+        "Mean CV accuracy": model.best_score_,
+        "Test accuracy": accuracy_score(y_test, predictions),
+    })
+
+    matrix = confusion_matrix(
+        y_test,
+        predictions,
+        labels=species_order,
+    )
+
+    confusion_matrices[name] = pd.DataFrame(
+        matrix,
+        index=[f"Actual {species}" for species in species_order],
+        columns=[f"Predicted {species}" for species in species_order],
+    )
+
+results_df = pd.DataFrame(results).round(3)
+```
+The petal model performed better than the sepal model on this test split (Table 1). It correctly classified 29 of 30 flowers, compared with 23 of 30 for the sepal model. The confusion matrices show which species were misclassified (Tables 2 and 3).
+
+**Table 2. Cross-validation and test accuracy by feature set**
+
+| Feature set | Best C | Mean CV accuracy | Test accuracy |
+|---|---:|---:|---:|
+| Sepal measurements | 1 | 0.833 | 0.767 |
+| Petal measurements | 10 | 0.958 | 0.967 |
+
+**Table 3. Sepal model confusion matrix**
+
+| Actual speScies | Predicted setosa | Predicted versicolor | Predicted virginica |
+|---|---:|---:|---:|
+| setosa | 10 | 0 | 0 |
+| versicolor | 0 | 6 | 4 |
+| virginica | 0 | 3 | 7 |
+
+**Table 4. Petal model confusion matrix**
+
+| Actual species | Predicted setosa | Predicted versicolor | Predicted virginica |
+|---|---:|---:|---:|
+| setosa | 10 | 0 | 0 |
+| versicolor | 0 | 10 | 0 |
+| virginica | 0 | 1 | 9 |
 
 # Discussion
 
+As we can see that, the petal model classify the Iris species more accurately than the sepal model. Since the petal model has 96.7 % 
+test accuracy which is better than 76.7% test accuracy for the sepal model. Also, the confusion matrix shows that both models classify 
+the Iris Setosa correctly. The petal model has only 1 incorrect prediction of Iris Virginica，while sepal model has 7 incorrect prediction
+of Iris Versicolour and Iris Virginica. Our result can enable scientists and even other people to know that in cases where measurement conditions are limited, and people 
+wants to quickly classify the types of iris, measuring petal is more useful than measuring sepal. Also, it can save time and costs 
+for researchers. Our finding meet what we expected to find, petal is more accurate than sepal. There are still many limitations in our research. Firstly, the dataset is quite small and only contains 150 Iris (50 for each of 3 Iris). 
+The small size of data may cause the model to be inaccurate for the other unknown Iris. Secondly, we could also try other model but not only 
+using Logistic Regression. If we try other model on the same data, we may have different results. Our finding may influence the steps and priorities that scientists choose for measurements before conducting experiments.
+There are some future questions this research could lead to. Is Logistic Regression the best predictive model? Can the accuracy be further improved by using another model? Besides petal and sepal, what other features can be used to classify Iris?
+
 # References
+
