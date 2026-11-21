@@ -28,7 +28,7 @@ test accuracy which is better than 76.7% test accuracy for the sepal model. Also
 the Iris Setosa correctly. The petal model has only 1 incorrect prediction of Iris Virginica，while sepal model has 7 incorrect prediction
 of Iris Versicolour and Iris Virginica.
 - Our result can enable scientists and even other people to know that in cases where measurement conditions are limited, and people 
-wants to quickly classfy the types of iris, measuring petal is more useful than measuring sepal. Also, it can save time and costs 
+wants to quickly classify the types of iris, measuring petal is more useful than measuring sepal. Also, it can save time and costs 
 for researchers.
 - Our finding meet what we expected to find, petal is more accurate than sepal.
 - There are still many limitations in our research. Firstly, the dataset is quite small and only contains 150 Iris (50 for each of 3 Iris). 
