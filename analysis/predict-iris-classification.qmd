@@ -155,7 +155,38 @@ petal_model = fit_species_model(petal_preprocessor)
 ```
 
 # Results
+```{python}
+from sklearn.metrics import accuracy_score, confusion_matrix
+from IPython.display import display
 
+species_order = ["setosa", "versicolor", "virginica"]
+models = {
+    "Sepal measurements": sepal_model,
+    "Petal measurements": petal_model,
+}
+
+results = []
+
+for name, model in models.items():
+    predictions = model.predict(X_test)
+    results.append({
+        "Feature set": name,
+        "Best C": model.best_params_["logisticregression__C"],
+        "Mean CV accuracy": model.best_score_,
+        "Test accuracy": accuracy_score(y_test, predictions),
+    })
+
+    matrix = confusion_matrix(y_test, predictions, labels=species_order)
+    matrix_df = pd.DataFrame(
+        matrix,
+        index=[f"Actual {species}" for species in species_order],
+        columns=[f"Predicted {species}" for species in species_order],
+    )
+    print(f"{name} confusion matrix")
+    display(matrix_df)
+
+display(pd.DataFrame(results).round(3))
+```
 # Discussion
 
 # References
