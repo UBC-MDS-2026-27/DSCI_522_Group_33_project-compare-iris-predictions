@@ -13,6 +13,10 @@ DSCI 522: Milestone 1 project repository
 
 We analyse the Iris dataset from the UCI Machine Learning Repository to answer the question: "Are sepal measurements or petal measurements better for predicting the species of an iris flower?" We compare two logistic regression models: one uses petal length and width, and the other uses sepal length and width. For a fair comparison, both models use the same training and test sets. We compare their accuracy and confusion matrices and find that the petal model predicts species more accurately than the sepal model (96.7% vs 76.7% test accuracy). This suggests that researchers who are short on time in the field could measure petals alone and still identify iris species reliably, although our data set is small and we tested only one type of model.
 
+## Rendered report
+
+View the rendered report at <https://ubc-mds-2026-27.github.io/DSCI_522_Group_33_project-compare-iris-predictions/>.
+
 ## How to run the analysis
 
 Follow these steps to reproduce the analysis.
