@@ -11,7 +11,7 @@ DSCI 522: Milestone 1 project repository
 
 ## Summary
 
-We analyse the Iris dataset from the UCI Machine Learning Repository to answer the question: "Are sepal measurements or petal measurements better for predicting the species of an iris flower?" We compare two logistic regression models: one uses petal length and width, and the other uses sepal length and width. For a fair comparison, both models use the same training and test sets. We compare their accuracy and confusion matrices and find that the petal model predicts species more accurately than the sepal model (96.7% vs 76.7% test accuracy).
+We analyse the Iris dataset from the UCI Machine Learning Repository to answer the question: "Are sepal measurements or petal measurements better for predicting the species of an iris flower?" We compare two logistic regression models: one uses petal length and width, and the other uses sepal length and width. For a fair comparison, both models use the same training and test sets. We compare their accuracy and confusion matrices and find that the petal model predicts species more accurately than the sepal model (96.7% vs 76.7% test accuracy). This suggests that researchers who are short on time in the field could measure petals alone and still identify iris species reliably, although our data set is small and we tested only one type of model.
 
 ## How to run the analysis
 
@@ -56,8 +56,12 @@ Run the following commands in a terminal:
 
 ## Dependencies
 
-We use uv for dependency management, Quarto for report generation and Python for data analysis.
-You can find the package requirements in `pyproject.toml` and `uv.lock`.
+- [uv](https://docs.astral.sh/uv/) 0.12.7, for managing the Python environment
+- [Quarto](https://quarto.org/docs/get-started/) 1.10.18, for rendering the report (install it separately; `uv sync` does not install the Quarto program)
+- Python 3.14 (uv installs it automatically)
+- Python packages: altair, ipython, jupyterlab, numpy, pandas, scikit-learn and vl-convert-python
+
+The full list of packages and versions is in [`pyproject.toml`](pyproject.toml) and [`uv.lock`](uv.lock).
 
 ## Licenses
 

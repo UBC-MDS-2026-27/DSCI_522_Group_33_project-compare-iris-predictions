@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Ramandeep Kaur, Peter Kim, Jiaqi Feng, Carine Ishimwe">
+<meta name="dcterms.date" content="2026-11-20">
+
+<title>Predicting Iris species from sepal and petal information</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="predict-iris-classification_files/libs/clipboard/clipboard.min.js"></script>
+<script src="predict-iris-classification_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="predict-iris-classification_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="predict-iris-classification_files/libs/quarto-html/popper.min.js"></script>
+<script src="predict-iris-classification_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="predict-iris-classification_files/libs/quarto-html/anchor.min.js"></script>
+<link href="predict-iris-classification_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="predict-iris-classification_files/libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="predict-iris-classification_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="predict-iris-classification_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="predict-iris-classification_files/libs/bootstrap/bootstrap-917079515d91bccb85b543faf8aa8bb6.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Predicting Iris species from sepal and petal information</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Ramandeep Kaur, Peter Kim, Jiaqi Feng, Carine Ishimwe </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 20, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div id="c22e7ddb" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> zipfile</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> altair <span class="im">as</span> alt</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split, GridSearchCV</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.compose <span class="im">import</span> make_column_transformer</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> accuracy_score, confusion_matrix</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> display</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="summary" class="level1">
+<h1>Summary</h1>
+<p>Can the species of an iris flower be identified from its petals alone, or from its sepals alone? In this project we compared how well these two sets of measurements predict species. Using the Iris data set, which contains measurements of 150 flowers from three species, we trained two logistic regression models that were identical except for their features: one used only sepal length and width, and the other used only petal length and width. We compared the two models and found that on the test set, the petal model had an accuracy of 96.7%, the sepal model had an accuracy of 76.7%. Petal measurements separated the species much more clearly, while the sepal model often confused <em>Iris versicolor</em> with <em>Iris virginica</em>. Knowing which measurements carry the most information is useful in practice, because if one set is enough, researchers working in the field could measure fewer features per plant without losing accuracy. Our results have some limitations. The data set is small, and with only 30 flowers in the test set, a single misclassification changes the accuracy by about 3.3%. We also tested only one type of model and three species, so our findings may not hold for other models or other irises.</p>
+</section>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>Irises are flowering plants found across the Northern Hemisphere, with hundreds of species, some of which are hard to tell apart. Like many flowers, an iris has two main types of floral parts (<a href="#fig-iris-species" class="quarto-xref">Figure&nbsp;1</a>). The sepals are the outer parts; in irises they are large and hang downward, which is why gardeners call them “falls”. The petals are the inner parts, which usually stand upright and are called “standards”. Botanists often distinguish similar species by the size and shape of parts like these, and because they can be measured with a ruler, they offer a simple and objective way to describe a flower.</p>
+<div id="fig-iris-species" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-iris-species-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="img/iris_species.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-iris-species-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: The three iris species in the data set, with a petal and a sepal labelled on each flower.
+</figcaption>
+</figure>
+</div>
+<p>The data we used has a long history. In the 1930s, the botanist Edgar Anderson measured the sepals and petals of irises to study how closely related species differ from one another. Two of the three species in the data were collected on the Gaspé Peninsula in Quebec. The statistician Ronald Fisher then used Anderson’s measurements to demonstrate a new method for sorting observations into groups based on several measurements at once (Fisher, 1936). Since then, the data set has become one of the most widely used examples in statistics and machine learning, and it is often one of the first data sets people meet when learning about classification.</p>
+<p>The question of which measurements matter most is worth answering for several reasons. Some iris species look very similar; <em>Iris versicolor</em> and <em>Iris virginica</em> in particular can be hard to tell apart by eye, so measurements can make identification more reliable. At the same time, measuring flowers takes time, especially when a researcher has many plants to measure in the field. If one part of the flower is enough to identify the species, the other measurements could be skipped, making data collection faster without losing accuracy. The question also reflects a common problem in data science: knowing which features carry the most information. A model with fewer, more informative features is simpler, easier to explain and less likely to overfit, which matters especially on a small data set. The Iris data is well suited to studying this, because its features fall naturally into two groups that can be compared fairly.</p>
+<p>The question we are trying to answer is: <strong>Are sepal measurements or petal measurements better for predicting the species of an iris flower?</strong></p>
+<p>To answer this question, we used the Iris data set from the University of California, Irvine (UCI) Machine Learning Repository (Fisher, 1988). Each row represents one iris flower. There are 150 flowers in total, 50 from each of three species: <em>Iris setosa</em>, <em>Iris versicolor</em> and <em>Iris virginica</em>. Each flower has four measurements, all recorded in centimetres: sepal length, sepal width, petal length and petal width. We split these into two groups: the sepal measurements (sepal length and sepal width) and the petal measurements (petal length and petal width).</p>
+<p>The target variable is the species of each flower. It is a categorical variable with three possible values (<em>setosa</em>, <em>versicolor</em> or <em>virginica</em>), which makes this a classification problem. The data can answer our question because every flower has both sepal and petal measurements as well as a known species. This means we can train one model on the sepal measurements only and another on the petal measurements only, keep everything else the same, and compare how well each predicts the species of flowers it has not seen before, as well as how large the difference between them is.</p>
+</section>
+<section id="methods" class="level1">
+<h1>Methods</h1>
+<section id="data" class="level2">
+<h2 class="anchored" data-anchor-id="data">Data</h2>
+<p>For this project, we used the Iris data set (Fisher, 1936) from the University of California, Irvine (UCI) Machine Learning Repository. Each row describes one iris flower with five columns: four measurements in centimetres (sepal length, sepal width, petal length and petal width) and the flower’s species (<em>Iris setosa</em>, <em>Iris versicolor</em> or <em>Iris virginica</em>). The data contain 150 flowers, 50 of each species, and are shared under a Creative Commons Attribution 4.0 International (CC BY 4.0) license. The code below downloads the zipped data from the repository and saves it, along with its extracted files, to the <code>data/raw</code> folder.</p>
+<div id="b749e21e" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check for data folders, create them if they do not exist</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>os.makedirs(<span class="st">"../data/raw"</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>os.makedirs(<span class="st">"../data/processed"</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># download data as zip and extract</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># this archive (UCI "Iris") contains iris.data, bezdekIris.data,</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># iris.names and Index</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://archive.ics.uci.edu/static/public/53/iris.zip"</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>request <span class="op">=</span> requests.get(url)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>request.raise_for_status()  <span class="co"># stop with an error if the download failed</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"../data/raw/iris.zip"</span>, <span class="st">"wb"</span>) <span class="im">as</span> f:</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    f.write(request.content)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> zipfile.ZipFile(<span class="st">"../data/raw/iris.zip"</span>, <span class="st">"r"</span>) <span class="im">as</span> zip_ref:</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    zip_ref.extractall(<span class="st">"../data/raw"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The archive contains two copies of the data. The file <code>iris.data</code> has two known errors, in the 35th and 38th flowers (Bezdek et al., 1999), and <code>bezdekIris.data</code> corrects them, so we used the corrected file. The file has no header row, so we named the columns when reading it in.</p>
+<div id="90c60036" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read in the corrected data file and name the columns</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (the raw file has no header row)</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>column_names <span class="op">=</span> [</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sepal_length_cm"</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sepal_width_cm"</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"petal_length_cm"</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"petal_width_cm"</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"species"</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>iris <span class="op">=</span> pd.read_csv(</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"../data/raw/bezdekIris.data"</span>,</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    header<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    names<span class="op">=</span>column_names,</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>iris.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">sepal_length_cm</th>
+<th data-quarto-table-cell-role="th">sepal_width_cm</th>
+<th data-quarto-table-cell-role="th">petal_length_cm</th>
+<th data-quarto-table-cell-role="th">petal_width_cm</th>
+<th data-quarto-table-cell-role="th">species</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>5.1</td>
+<td>3.5</td>
+<td>1.4</td>
+<td>0.2</td>
+<td>Iris-setosa</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>4.9</td>
+<td>3.0</td>
+<td>1.4</td>
+<td>0.2</td>
+<td>Iris-setosa</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>4.7</td>
+<td>3.2</td>
+<td>1.3</td>
+<td>0.2</td>
+<td>Iris-setosa</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>4.6</td>
+<td>3.1</td>
+<td>1.5</td>
+<td>0.2</td>
+<td>Iris-setosa</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>5.0</td>
+<td>3.6</td>
+<td>1.4</td>
+<td>0.2</td>
+<td>Iris-setosa</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<section id="data-cleaning" class="level3">
+<h3 class="anchored" data-anchor-id="data-cleaning">Data cleaning</h3>
+<p>We confirmed that there were 150 rows, with 50 flowers of each species, and that the data contained no missing values. We then removed the “Iris-” prefix from the species names to make the figures and tables that follow easier to read, and saved the cleaned data to the data/processed folder.</p>
+<div id="0f80e2b6" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(iris.shape)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>iris.info()</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(iris.isna().<span class="bu">sum</span>())</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(iris.value_counts(<span class="st">"species"</span>))</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>iris[<span class="st">"species"</span>] <span class="op">=</span> iris[<span class="st">"species"</span>].replace({</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Iris-setosa"</span>: <span class="st">"setosa"</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Iris-versicolor"</span>: <span class="st">"versicolor"</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Iris-virginica"</span>: <span class="st">"virginica"</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>iris.to_csv(<span class="st">"../data/processed/iris_clean.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(150, 5)
+&lt;class 'pandas.DataFrame'&gt;
+RangeIndex: 150 entries, 0 to 149
+Data columns (total 5 columns):
+ #   Column           Non-Null Count  Dtype  
+---  ------           --------------  -----  
+ 0   sepal_length_cm  150 non-null    float64
+ 1   sepal_width_cm   150 non-null    float64
+ 2   petal_length_cm  150 non-null    float64
+ 3   petal_width_cm   150 non-null    float64
+ 4   species          150 non-null    str    
+dtypes: float64(4), str(1)
+memory usage: 6.0 KB
+sepal_length_cm    0
+sepal_width_cm     0
+petal_length_cm    0
+petal_width_cm     0
+species            0
+dtype: int64
+species
+Iris-setosa        50
+Iris-versicolor    50
+Iris-virginica     50
+Name: count, dtype: int64</code></pre>
+</div>
+</div>
+</section>
+<section id="splitting-the-data" class="level3">
+<h3 class="anchored" data-anchor-id="splitting-the-data">Splitting the data</h3>
+<p>Before any data exploration or preprocessing, we split the data, with 80% allocated to the training set and 20% to the test set. Because the data set is small, we wanted to give the models as much training data as possible. The split was stratified by species so that each set has the same species proportions, and a random seed was set for reproducibility. We then separated the features from the target, since scikit-learn takes them as separate inputs. Finally, because our analysis compares more than one model, we defined a feature group for each model to select from the same training and test sets. This means every model is trained on the same flowers and evaluated on the same flowers, which keeps the comparison fair.</p>
+<div id="440787ed" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>iris_train, iris_test <span class="op">=</span> train_test_split(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    iris, test_size<span class="op">=</span><span class="fl">0.20</span>, random_state<span class="op">=</span><span class="dv">522</span>, stratify<span class="op">=</span>iris[<span class="st">'species'</span>])</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>iris_train.to_csv(<span class="st">"../data/processed/iris_train.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>iris_test.to_csv(<span class="st">"../data/processed/iris_test.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># separate the features (X) from the target (y), for both sets</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>X_train <span class="op">=</span> iris_train.drop(columns<span class="op">=</span><span class="st">"species"</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>y_train <span class="op">=</span> iris_train[<span class="st">"species"</span>]</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>X_test <span class="op">=</span> iris_test.drop(columns<span class="op">=</span><span class="st">"species"</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>y_test <span class="op">=</span> iris_test[<span class="st">"species"</span>]</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co"># the two feature groups to compare</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>sepal_features <span class="op">=</span> [<span class="st">"sepal_length_cm"</span>, <span class="st">"sepal_width_cm"</span>]</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>petal_features <span class="op">=</span> [<span class="st">"petal_length_cm"</span>, <span class="st">"petal_width_cm"</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="analysis" class="level2">
+<h2 class="anchored" data-anchor-id="analysis">Analysis</h2>
+<p>Logistic regression, as implemented in scikit-learn (Pedregosa et al., 2011), was used to build two classification models, one using sepal measurements and one using petal measurements, to compare which group of measurements better predicts iris species. Together, the two models use all four measurements in the data set. Both models were fitted with identical preprocessing (standardizing the features) and the same hyperparameter tuning (the inverse regularization strength, C, chosen using 5-fold cross-validation on the training set): the sepal model uses sepal length and sepal width, and the petal model uses petal length and petal width. Keeping everything else identical allowed us to attribute any difference in performance to the feature group.</p>
+<p>All four measurements are continuous and share the same units, but logistic regression’s regularization penalizes all coefficients equally, so we standardized each measurement to have a mean of 0 and a standard deviation of 1. The scaler is placed inside each model’s pipeline, so it is learned from the training data only, and within cross-validation from each fold’s training portion only. As a result, no information from the validation or test data leaks into it.</p>
+<p>For our evaluation metric, we used accuracy, which represents the proportion of flowers whose species is predicted correctly. Because the three species are equally represented in the data, accuracy is a fair and easily interpretable metric. All models were evaluated with the same metric, the same cross-validation folds and the same test set, so they can be compared directly.</p>
+<div id="5d83c828" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create one preprocessor per feature group: select that group's columns and scale them</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> make_preprocessor(features):</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> make_column_transformer(</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        (StandardScaler(), features),</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        remainder<span class="op">=</span><span class="st">"drop"</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>        verbose_feature_names_out<span class="op">=</span><span class="va">False</span>,  <span class="co"># keep the original column names</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>sepal_preprocessor <span class="op">=</span> make_preprocessor(sepal_features)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>petal_preprocessor <span class="op">=</span> make_preprocessor(petal_features)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="fa6ece92" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># define search space for tuning C, and specify cross-validation fold count</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>param_grid <span class="op">=</span> {<span class="st">"logisticregression__C"</span>: [<span class="fl">0.001</span>, <span class="fl">0.01</span>, <span class="fl">0.1</span>, <span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">100</span>, <span class="dv">1000</span>]}</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>cv_folds <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># function to tune and fit the model, given a feature group's preprocessor</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fit_species_model(preprocessor):</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Tune and fit a logistic regression using the given preprocessor."""</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    pipeline <span class="op">=</span> make_pipeline(preprocessor, LogisticRegression(max_iter<span class="op">=</span><span class="dv">1000</span>))</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    search <span class="op">=</span> GridSearchCV(pipeline, param_grid, cv<span class="op">=</span>cv_folds, scoring<span class="op">=</span><span class="st">"accuracy"</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    search.fit(X_train, y_train)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> search</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We then applied the same tuning procedure to the sepal measurements and to the petal measurements, giving one tuned model per feature group. Tuning results and test set performance are reported in the Results &amp; Discussion section.</p>
+<div id="f6f00946" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit one tuned model per feature group</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>sepal_model <span class="op">=</span> fit_species_model(sepal_preprocessor)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>petal_model <span class="op">=</span> fit_species_model(petal_preprocessor)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="results" class="level1">
+<h1>Results</h1>
+<section id="exploratory-data-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="exploratory-data-analysis">Exploratory data analysis</h3>
+<p>In the training data, the three species have similar sepal widths but differ more clearly in sepal length, and they differ strongly in both petal length and petal width. Setosa has much smaller petals than the other two species, while versicolor and virginica overlap more.</p>
+<div id="7c72c3ed" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># summarize each measurement by species (training data only):</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># mean, with standard deviation in brackets</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>measurement_labels <span class="op">=</span> {</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sepal_length_cm"</span>: <span class="st">"Sepal length (cm)"</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sepal_width_cm"</span>: <span class="st">"Sepal width (cm)"</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"petal_length_cm"</span>: <span class="st">"Petal length (cm)"</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"petal_width_cm"</span>: <span class="st">"Petal width (cm)"</span>,</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>species_groups <span class="op">=</span> iris_train.groupby(<span class="st">"species"</span>)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>means <span class="op">=</span> species_groups.mean().<span class="bu">map</span>(<span class="st">"</span><span class="sc">{:.2f}</span><span class="st">"</span>.<span class="bu">format</span>)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>sds <span class="op">=</span> species_groups.std().<span class="bu">map</span>(<span class="st">"</span><span class="sc">{:.2f}</span><span class="st">"</span>.<span class="bu">format</span>)</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>train_summary <span class="op">=</span> (</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    (means <span class="op">+</span> <span class="st">" ("</span> <span class="op">+</span> sds <span class="op">+</span> <span class="st">")"</span>)</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    .rename(columns<span class="op">=</span>measurement_labels)</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    .assign(<span class="op">**</span>{<span class="st">"Number of flowers"</span>: species_groups.size()})</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    .rename_axis(<span class="st">"Species"</span>)</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>train_summary</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Sepal length (cm)</th>
+<th data-quarto-table-cell-role="th">Sepal width (cm)</th>
+<th data-quarto-table-cell-role="th">Petal length (cm)</th>
+<th data-quarto-table-cell-role="th">Petal width (cm)</th>
+<th data-quarto-table-cell-role="th">Number of flowers</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Species</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">setosa</th>
+<td>4.97 (0.37)</td>
+<td>3.42 (0.40)</td>
+<td>1.44 (0.18)</td>
+<td>0.23 (0.08)</td>
+<td>40</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">versicolor</th>
+<td>5.89 (0.49)</td>
+<td>2.77 (0.32)</td>
+<td>4.22 (0.47)</td>
+<td>1.32 (0.21)</td>
+<td>40</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">virginica</th>
+<td>6.57 (0.57)</td>
+<td>2.98 (0.33)</td>
+<td>5.52 (0.48)</td>
+<td>2.01 (0.27)</td>
+<td>40</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Table 1: Mean (standard deviation) of each measurement by species in the training data.</p>
+<p>In the petal plot, the three species form fairly distinct clusters, with setosa clearly separated and only a small overlap between versicolor and virginica. In the sepal plot, setosa is still distinct, but versicolor and virginica overlap substantially. This suggests the petal measurements may predict species better than the sepal measurements, which is what our models try to answer directly.</p>
+<div id="4fac9e17" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># scatter plot of two measurements in the training data, coloured by species</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> species_scatter(x, y, x_title, y_title, title):</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> alt.Chart(iris_train, title<span class="op">=</span>title).mark_point(</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>        filled<span class="op">=</span><span class="va">True</span>, size<span class="op">=</span><span class="dv">60</span>, opacity<span class="op">=</span><span class="fl">0.6</span>  <span class="co"># transparency shows overlapping flowers</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    ).encode(</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span>alt.X(x, <span class="bu">type</span><span class="op">=</span><span class="st">"quantitative"</span>, title<span class="op">=</span>x_title).scale(zero<span class="op">=</span><span class="va">False</span>),</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span>alt.Y(y, <span class="bu">type</span><span class="op">=</span><span class="st">"quantitative"</span>, title<span class="op">=</span>y_title).scale(zero<span class="op">=</span><span class="va">False</span>),</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>        color<span class="op">=</span>alt.Color(<span class="st">"species"</span>, <span class="bu">type</span><span class="op">=</span><span class="st">"nominal"</span>, title<span class="op">=</span><span class="st">"Species"</span>),</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>        shape<span class="op">=</span>alt.Shape(<span class="st">"species"</span>, <span class="bu">type</span><span class="op">=</span><span class="st">"nominal"</span>, title<span class="op">=</span><span class="st">"Species"</span>),</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>        tooltip<span class="op">=</span>[<span class="st">"species"</span>, x, y],</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    ).properties(width<span class="op">=</span><span class="dv">450</span>, height<span class="op">=</span><span class="dv">250</span>)</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>sepal_plot <span class="op">=</span> species_scatter(</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sepal_length_cm"</span>, <span class="st">"sepal_width_cm"</span>,</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Sepal length (cm)"</span>, <span class="st">"Sepal width (cm)"</span>, <span class="st">"Sepal measurements"</span>,</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>petal_plot <span class="op">=</span> species_scatter(</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"petal_length_cm"</span>, <span class="st">"petal_width_cm"</span>,</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Petal length (cm)"</span>, <span class="st">"Petal width (cm)"</span>, <span class="st">"Petal measurements"</span>,</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>(sepal_plot <span class="op">&amp;</span> petal_plot).configure_axis(</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>    labelFontSize<span class="op">=</span><span class="dv">12</span>, titleFontSize<span class="op">=</span><span class="dv">14</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>).configure_legend(</span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>    labelFontSize<span class="op">=</span><span class="dv">12</span>, titleFontSize<span class="op">=</span><span class="dv">14</span></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>).configure_title(</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>    fontSize<span class="op">=</span><span class="dv">16</span></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+
+<style>
+  #altair-viz-ce10ca96aed9427391524c8acf5016ae.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-ce10ca96aed9427391524c8acf5016ae.vega-embed details,
+  #altair-viz-ce10ca96aed9427391524c8acf5016ae.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-ce10ca96aed9427391524c8acf5016ae"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-ce10ca96aed9427391524c8acf5016ae") {
+      outputDiv = document.getElementById("altair-viz-ce10ca96aed9427391524c8acf5016ae");
+    }
+
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@6?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@6.4.1?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@7?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      let deps = ["vega-embed"];
+      require(deps, displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "6")
+        .then(() => maybeLoadScript("vega-lite", "6.4.1"))
+        .then(() => maybeLoadScript("vega-embed", "7"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}, "axis": {"labelFontSize": 12, "titleFontSize": 14}, "legend": {"labelFontSize": 12, "titleFontSize": 14}, "title": {"fontSize": 16}}, "vconcat": [{"mark": {"type": "point", "filled": true, "opacity": 0.6, "size": 60}, "encoding": {"color": {"field": "species", "title": "Species", "type": "nominal"}, "shape": {"field": "species", "title": "Species", "type": "nominal"}, "tooltip": [{"field": "species", "type": "nominal"}, {"field": "sepal_length_cm", "type": "quantitative"}, {"field": "sepal_width_cm", "type": "quantitative"}], "x": {"field": "sepal_length_cm", "scale": {"zero": false}, "title": "Sepal length (cm)", "type": "quantitative"}, "y": {"field": "sepal_width_cm", "scale": {"zero": false}, "title": "Sepal width (cm)", "type": "quantitative"}}, "height": 250, "title": "Sepal measurements", "width": 450}, {"mark": {"type": "point", "filled": true, "opacity": 0.6, "size": 60}, "encoding": {"color": {"field": "species", "title": "Species", "type": "nominal"}, "shape": {"field": "species", "title": "Species", "type": "nominal"}, "tooltip": [{"field": "species", "type": "nominal"}, {"field": "petal_length_cm", "type": "quantitative"}, {"field": "petal_width_cm", "type": "quantitative"}], "x": {"field": "petal_length_cm", "scale": {"zero": false}, "title": "Petal length (cm)", "type": "quantitative"}, "y": {"field": "petal_width_cm", "scale": {"zero": false}, "title": "Petal width (cm)", "type": "quantitative"}}, "height": 250, "title": "Petal measurements", "width": 450}], "data": {"name": "data-75e5e761449185c888fc3530ea4d25cb"}, "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json", "datasets": {"data-75e5e761449185c888fc3530ea4d25cb": [{"sepal_length_cm": 5.1, "sepal_width_cm": 3.7, "petal_length_cm": 1.5, "petal_width_cm": 0.4, "species": "setosa"}, {"sepal_length_cm": 6.3, "sepal_width_cm": 2.7, "petal_length_cm": 4.9, "petal_width_cm": 1.8, "species": "virginica"}, {"sepal_length_cm": 5.5, "sepal_width_cm": 2.4, "petal_length_cm": 3.7, "petal_width_cm": 1.0, "species": "versicolor"}, {"sepal_length_cm": 4.9, "sepal_width_cm": 3.6, "petal_length_cm": 1.4, "petal_width_cm": 0.1, "species": "setosa"}, {"sepal_length_cm": 6.3, "sepal_width_cm": 2.9, "petal_length_cm": 5.6, "petal_width_cm": 1.8, "species": "virginica"}, {"sepal_length_cm": 6.7, "sepal_width_cm": 3.0, "petal_length_cm": 5.2, "petal_width_cm": 2.3, "species": "virginica"}, {"sepal_length_cm": 6.1, "sepal_width_cm": 3.0, "petal_length_cm": 4.9, "petal_width_cm": 1.8, "species": "virginica"}, {"sepal_length_cm": 6.3, "sepal_width_cm": 3.4, "petal_length_cm": 5.6, "petal_width_cm": 2.4, "species": "virginica"}, {"sepal_length_cm": 5.9, "sepal_width_cm": 3.0, "petal_length_cm": 4.2, "petal_width_cm": 1.5, "species": "versicolor"}, {"sepal_length_cm": 6.1, "sepal_width_cm": 2.6, "petal_length_cm": 5.6, "petal_width_cm": 1.4, "species": "virginica"}, {"sepal_length_cm": 6.9, "sepal_width_cm": 3.1, "petal_length_cm": 5.4, "petal_width_cm": 2.1, "species": "virginica"}, {"sepal_length_cm": 5.0, "sepal_width_cm": 3.5, "petal_length_cm": 1.3, "petal_width_cm": 0.3, "species": "setosa"}, {"sepal_length_cm": 6.4, "sepal_width_cm": 2.9, "petal_length_cm": 4.3, "petal_width_cm": 1.3, "species": "versicolor"}, {"sepal_length_cm": 5.7, "sepal_width_cm": 2.9, "petal_length_cm": 4.2, "petal_width_cm": 1.3, "species": "versicolor"}, {"sepal_length_cm": 4.6, "sepal_width_cm": 3.2, "petal_length_cm": 1.4, "petal_width_cm": 0.2, "species": "setosa"}, {"sepal_length_cm": 6.3, "sepal_width_cm": 3.3, "petal_length_cm": 6.0, "petal_width_cm": 2.5, "species": "virginica"}, {"sepal_length_cm": 5.9, "sepal_width_cm": 3.2, "petal_length_cm": 4.8, "petal_width_cm": 1.8, "species": "versicolor"}, {"sepal_length_cm": 5.1, "sepal_width_cm": 3.5, "petal_length_cm": 1.4, "petal_width_cm": 0.2, "species": "setosa"}, {"sepal_length_cm": 5.1, "sepal_width_cm": 3.8, "petal_length_cm": 1.9, "petal_width_cm": 0.4, "species": "setosa"}, {"sepal_length_cm": 5.0, "sepal_width_cm": 3.3, "petal_length_cm": 1.4, "petal_width_cm": 0.2, "species": "setosa"}, {"sepal_length_cm": 4.8, "sepal_width_cm": 3.0, "petal_length_cm": 1.4, "petal_width_cm": 0.1, "species": "setosa"}, {"sepal_length_cm": 5.8, "sepal_width_cm": 4.0, "petal_length_cm": 1.2, "petal_width_cm": 0.2, "species": "setosa"}, {"sepal_length_cm": 5.8, "sepal_width_cm": 2.7, "petal_length_cm": 5.1, "petal_width_cm": 1.9, "species": "virginica"}, {"sepal_length_cm": 6.3, "sepal_width_cm": 2.8, "petal_length_cm": 5.1, "petal_width_cm": 1.5, "species": "virginica"}, {"sepal_length_cm": 5.7, "sepal_width_cm": 2.8, "petal_length_cm": 4.1, "petal_width_cm": 1.3, "species": "versicolor"}, {"sepal_length_cm": 5.1, "sepal_width_cm": 3.8, "petal_length_cm": 1.6, "petal_width_cm": 0.2, "species": "setosa"}, {"sepal_length_cm": 5.5, "sepal_width_cm": 2.4, "petal_length_cm": 3.8, "petal_width_cm": 1.1, "species": "versicolor"}, {"sepal_length_cm": 7.2, "sepal_width_cm": 3.0, "petal_length_cm": 5.8, "petal_width_cm": 1.6, "species": "virginica"}, {"sepal_length_cm": 5.5, "sepal_width_cm": 4.2, "petal_length_cm": 1.4, "petal_width_cm": 0.2, "species": "setosa"}, {"sepal_length_cm": 4.3, "sepal_width_cm": 3.0, "petal_length_cm": 1.1, "petal_width_cm": 0.1, "species": "setosa"}, {"sepal_length_cm": 6.9, "sepal_width_cm": 3.1, "petal_length_cm": 5.1, "petal_width_cm": 2.3, "species": "virginica"}, {"sepal_length_cm": 5.6, "sepal_width_cm": 2.9, "petal_length_cm": 3.6, "petal_width_cm": 1.3, "species": "versicolor"}, {"sepal_length_cm": 7.3, "sepal_width_cm": 2.9, "petal_length_cm": 6.3, "petal_width_cm": 1.8, "species": "virginica"}, {"sepal_length_cm": 6.2, "sepal_width_cm": 2.9, "petal_length_cm": 4.3, "petal_width_cm": 1.3, "species": "versicolor"}, {"sepal_length_cm": 6.3, "sepal_width_cm": 2.5, "petal_length_cm": 4.9, "petal_width_cm": 1.5, "species": "versicolor"}, {"sepal_length_cm": 7.0, "sepal_width_cm": 3.2, "petal_length_cm": 4.7, "petal_width_cm": 1.4, "species": "versicolor"}, {"sepal_length_cm": 7.7, "sepal_width_cm": 3.0, "petal_length_cm": 6.1, "petal_width_cm": 2.3, "species": "virginica"}, {"sepal_length_cm": 4.9, "sepal_width_cm": 3.1, "petal_length_cm": 1.5, "petal_width_cm": 0.2, "species": "setosa"}, {"sepal_length_cm": 7.2, "sepal_width_cm": 3.2, "petal_length_cm": 6.0, "petal_width_cm": 1.8, "species": "virginica"}, {"sepal_length_cm": 6.7, "sepal_width_cm": 3.1, "petal_length_cm": 4.7, "petal_width_cm": 1.5, "species": "versicolor"}, {"sepal_length_cm": 4.4, "sepal_width_cm": 3.2, "petal_length_cm": 1.3, "petal_width_cm": 0.2, "species": "setosa"}, {"sepal_length_cm": 4.6, "sepal_width_cm": 3.1, "petal_length_cm": 1.5, "petal_width_cm": 0.2, "species": "setosa"}, {"sepal_length_cm": 5.4, "sepal_width_cm": 3.0, "petal_length_cm": 4.5, "petal_width_cm": 1.5, "species": "versicolor"}, {"sepal_length_cm": 4.4, "sepal_width_cm": 3.0, "petal_length_cm": 1.3, "petal_width_cm": 0.2, "species": "setosa"}, {"sepal_length_cm": 7.1, "sepal_width_cm": 3.0, "petal_length_cm": 5.9, "petal_width_cm": 2.1, "species": "virginica"}, {"sepal_length_cm": 5.8, "sepal_width_cm": 2.7, "petal_length_cm": 5.1, "petal_width_cm": 1.9, "species": "virginica"}, {"sepal_length_cm": 5.0, "sepal_width_cm": 3.6, "petal_length_cm": 1.4, "petal_width_cm": 0.2, "species": "setosa"}, {"sepal_length_cm": 5.2, "sepal_width_cm": 3.5, "petal_length_cm": 1.5, "petal_width_cm": 0.2, "species": "setosa"}, {"sepal_length_cm": 4.4, "sepal_width_cm": 2.9, "petal_length_cm": 1.4, "petal_width_cm": 0.2, "species": "setosa"}, {"sepal_length_cm": 6.7, "sepal_width_cm": 3.0, "petal_length_cm": 5.0, "petal_width_cm": 1.7, "species": "versicolor"}, {"sepal_length_cm": 6.0, "sepal_width_cm": 2.9, "petal_length_cm": 4.5, "petal_width_cm": 1.5, "species": "versicolor"}, {"sepal_length_cm": 5.2, "sepal_width_cm": 2.7, "petal_length_cm": 3.9, "petal_width_cm": 1.4, "species": "versicolor"}, {"sepal_length_cm": 6.6, "sepal_width_cm": 3.0, "petal_length_cm": 4.4, "petal_width_cm": 1.4, "species": "versicolor"}, {"sepal_length_cm": 6.0, "sepal_width_cm": 2.2, "petal_length_cm": 5.0, "petal_width_cm": 1.5, "species": "virginica"}, {"sepal_length_cm": 6.2, "sepal_width_cm": 2.8, "petal_length_cm": 4.8, "petal_width_cm": 1.8, "species": "virginica"}, {"sepal_length_cm": 5.7, "sepal_width_cm": 2.5, "petal_length_cm": 5.0, "petal_width_cm": 2.0, "species": "virginica"}, {"sepal_length_cm": 6.2, "sepal_width_cm": 3.4, "petal_length_cm": 5.4, "petal_width_cm": 2.3, "species": "virginica"}, {"sepal_length_cm": 5.0, "sepal_width_cm": 3.2, "petal_length_cm": 1.2, "petal_width_cm": 0.2, "species": "setosa"}, {"sepal_length_cm": 5.6, "sepal_width_cm": 3.0, "petal_length_cm": 4.1, "petal_width_cm": 1.3, "species": "versicolor"}, {"sepal_length_cm": 6.6, "sepal_width_cm": 2.9, "petal_length_cm": 4.6, "petal_width_cm": 1.3, "species": "versicolor"}, {"sepal_length_cm": 5.1, "sepal_width_cm": 3.5, "petal_length_cm": 1.4, "petal_width_cm": 0.3, "species": "setosa"}, {"sepal_length_cm": 4.6, "sepal_width_cm": 3.6, "petal_length_cm": 1.0, "petal_width_cm": 0.2, "species": "setosa"}, {"sepal_length_cm": 6.0, "sepal_width_cm": 3.4, "petal_length_cm": 4.5, "petal_width_cm": 1.6, "species": "versicolor"}, {"sepal_length_cm": 4.8, "sepal_width_cm": 3.1, "petal_length_cm": 1.6, "petal_width_cm": 0.2, "species": "setosa"}, {"sepal_length_cm": 5.6, "sepal_width_cm": 2.5, "petal_length_cm": 3.9, "petal_width_cm": 1.1, "species": "versicolor"}, {"sepal_length_cm": 5.0, "sepal_width_cm": 3.0, "petal_length_cm": 1.6, "petal_width_cm": 0.2, "species": "setosa"}, {"sepal_length_cm": 4.9, "sepal_width_cm": 2.4, "petal_length_cm": 3.3, "petal_width_cm": 1.0, "species": "versicolor"}, {"sepal_length_cm": 6.7, "sepal_width_cm": 3.3, "petal_length_cm": 5.7, "petal_width_cm": 2.1, "species": "virginica"}, {"sepal_length_cm": 5.0, "sepal_width_cm": 2.0, "petal_length_cm": 3.5, "petal_width_cm": 1.0, "species": "versicolor"}, {"sepal_length_cm": 5.5, "sepal_width_cm": 2.5, "petal_length_cm": 4.0, "petal_width_cm": 1.3, "species": "versicolor"}, {"sepal_length_cm": 5.5, "sepal_width_cm": 2.3, "petal_length_cm": 4.0, "petal_width_cm": 1.3, "species": "versicolor"}, {"sepal_length_cm": 5.7, "sepal_width_cm": 3.0, "petal_length_cm": 4.2, "petal_width_cm": 1.2, "species": "versicolor"}, {"sepal_length_cm": 6.4, "sepal_width_cm": 2.8, "petal_length_cm": 5.6, "petal_width_cm": 2.1, "species": "virginica"}, {"sepal_length_cm": 6.5, "sepal_width_cm": 3.0, "petal_length_cm": 5.8, "petal_width_cm": 2.2, "species": "virginica"}, {"sepal_length_cm": 6.0, "sepal_width_cm": 2.2, "petal_length_cm": 4.0, "petal_width_cm": 1.0, "species": "versicolor"}, {"sepal_length_cm": 6.1, "sepal_width_cm": 2.9, "petal_length_cm": 4.7, "petal_width_cm": 1.4, "species": "versicolor"}, {"sepal_length_cm": 5.1, "sepal_width_cm": 3.4, "petal_length_cm": 1.5, "petal_width_cm": 0.2, "species": "setosa"}, {"sepal_length_cm": 7.6, "sepal_width_cm": 3.0, "petal_length_cm": 6.6, "petal_width_cm": 2.1, "species": "virginica"}, {"sepal_length_cm": 4.8, "sepal_width_cm": 3.4, "petal_length_cm": 1.9, "petal_width_cm": 0.2, "species": "setosa"}, {"sepal_length_cm": 5.7, "sepal_width_cm": 3.8, "petal_length_cm": 1.7, "petal_width_cm": 0.3, "species": "setosa"}, {"sepal_length_cm": 5.4, "sepal_width_cm": 3.9, "petal_length_cm": 1.7, "petal_width_cm": 0.4, "species": "setosa"}, {"sepal_length_cm": 7.9, "sepal_width_cm": 3.8, "petal_length_cm": 6.4, "petal_width_cm": 2.0, "species": "virginica"}, {"sepal_length_cm": 6.0, "sepal_width_cm": 2.7, "petal_length_cm": 5.1, "petal_width_cm": 1.6, "species": "versicolor"}, {"sepal_length_cm": 6.9, "sepal_width_cm": 3.2, "petal_length_cm": 5.7, "petal_width_cm": 2.3, "species": "virginica"}, {"sepal_length_cm": 6.3, "sepal_width_cm": 2.5, "petal_length_cm": 5.0, "petal_width_cm": 1.9, "species": "virginica"}, {"sepal_length_cm": 6.4, "sepal_width_cm": 3.2, "petal_length_cm": 5.3, "petal_width_cm": 2.3, "species": "virginica"}, {"sepal_length_cm": 4.9, "sepal_width_cm": 3.1, "petal_length_cm": 1.5, "petal_width_cm": 0.1, "species": "setosa"}, {"sepal_length_cm": 5.8, "sepal_width_cm": 2.8, "petal_length_cm": 5.1, "petal_width_cm": 2.4, "species": "virginica"}, {"sepal_length_cm": 6.5, "sepal_width_cm": 3.2, "petal_length_cm": 5.1, "petal_width_cm": 2.0, "species": "virginica"}, {"sepal_length_cm": 6.8, "sepal_width_cm": 3.2, "petal_length_cm": 5.9, "petal_width_cm": 2.3, "species": "virginica"}, {"sepal_length_cm": 4.5, "sepal_width_cm": 2.3, "petal_length_cm": 1.3, "petal_width_cm": 0.3, "species": "setosa"}, {"sepal_length_cm": 6.7, "sepal_width_cm": 2.5, "petal_length_cm": 5.8, "petal_width_cm": 1.8, "species": "virginica"}, {"sepal_length_cm": 5.4, "sepal_width_cm": 3.9, "petal_length_cm": 1.3, "petal_width_cm": 0.4, "species": "setosa"}, {"sepal_length_cm": 5.5, "sepal_width_cm": 3.5, "petal_length_cm": 1.3, "petal_width_cm": 0.2, "species": "setosa"}, {"sepal_length_cm": 5.8, "sepal_width_cm": 2.6, "petal_length_cm": 4.0, "petal_width_cm": 1.2, "species": "versicolor"}, {"sepal_length_cm": 4.7, "sepal_width_cm": 3.2, "petal_length_cm": 1.6, "petal_width_cm": 0.2, "species": "setosa"}, {"sepal_length_cm": 5.6, "sepal_width_cm": 2.7, "petal_length_cm": 4.2, "petal_width_cm": 1.3, "species": "versicolor"}, {"sepal_length_cm": 6.3, "sepal_width_cm": 3.3, "petal_length_cm": 4.7, "petal_width_cm": 1.6, "species": "versicolor"}, {"sepal_length_cm": 6.4, "sepal_width_cm": 2.7, "petal_length_cm": 5.3, "petal_width_cm": 1.9, "species": "virginica"}, {"sepal_length_cm": 4.6, "sepal_width_cm": 3.4, "petal_length_cm": 1.4, "petal_width_cm": 0.3, "species": "setosa"}, {"sepal_length_cm": 5.8, "sepal_width_cm": 2.7, "petal_length_cm": 3.9, "petal_width_cm": 1.2, "species": "versicolor"}, {"sepal_length_cm": 6.8, "sepal_width_cm": 3.0, "petal_length_cm": 5.5, "petal_width_cm": 2.1, "species": "virginica"}, {"sepal_length_cm": 6.5, "sepal_width_cm": 3.0, "petal_length_cm": 5.5, "petal_width_cm": 1.8, "species": "virginica"}, {"sepal_length_cm": 5.0, "sepal_width_cm": 3.4, "petal_length_cm": 1.5, "petal_width_cm": 0.2, "species": "setosa"}, {"sepal_length_cm": 5.8, "sepal_width_cm": 2.7, "petal_length_cm": 4.1, "petal_width_cm": 1.0, "species": "versicolor"}, {"sepal_length_cm": 5.3, "sepal_width_cm": 3.7, "petal_length_cm": 1.5, "petal_width_cm": 0.2, "species": "setosa"}, {"sepal_length_cm": 6.2, "sepal_width_cm": 2.2, "petal_length_cm": 4.5, "petal_width_cm": 1.5, "species": "versicolor"}, {"sepal_length_cm": 6.1, "sepal_width_cm": 3.0, "petal_length_cm": 4.6, "petal_width_cm": 1.4, "species": "versicolor"}, {"sepal_length_cm": 4.8, "sepal_width_cm": 3.0, "petal_length_cm": 1.4, "petal_width_cm": 0.3, "species": "setosa"}, {"sepal_length_cm": 5.7, "sepal_width_cm": 2.8, "petal_length_cm": 4.5, "petal_width_cm": 1.3, "species": "versicolor"}, {"sepal_length_cm": 4.7, "sepal_width_cm": 3.2, "petal_length_cm": 1.3, "petal_width_cm": 0.2, "species": "setosa"}, {"sepal_length_cm": 6.7, "sepal_width_cm": 3.1, "petal_length_cm": 4.4, "petal_width_cm": 1.4, "species": "versicolor"}, {"sepal_length_cm": 7.7, "sepal_width_cm": 3.8, "petal_length_cm": 6.7, "petal_width_cm": 2.2, "species": "virginica"}, {"sepal_length_cm": 5.7, "sepal_width_cm": 4.4, "petal_length_cm": 1.5, "petal_width_cm": 0.4, "species": "setosa"}, {"sepal_length_cm": 5.1, "sepal_width_cm": 2.5, "petal_length_cm": 3.0, "petal_width_cm": 1.1, "species": "versicolor"}, {"sepal_length_cm": 6.4, "sepal_width_cm": 2.8, "petal_length_cm": 5.6, "petal_width_cm": 2.2, "species": "virginica"}, {"sepal_length_cm": 5.1, "sepal_width_cm": 3.8, "petal_length_cm": 1.5, "petal_width_cm": 0.3, "species": "setosa"}, {"sepal_length_cm": 5.7, "sepal_width_cm": 2.6, "petal_length_cm": 3.5, "petal_width_cm": 1.0, "species": "versicolor"}, {"sepal_length_cm": 5.6, "sepal_width_cm": 2.8, "petal_length_cm": 4.9, "petal_width_cm": 2.0, "species": "virginica"}, {"sepal_length_cm": 6.4, "sepal_width_cm": 3.1, "petal_length_cm": 5.5, "petal_width_cm": 1.8, "species": "virginica"}]}}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+<p>Figure 1: Sepal measurements (left) and petal measurements (right) of the flowers in the training data, coloured by species.</p>
+<div id="d3c7d0b0" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>species_order <span class="op">=</span> [<span class="st">"setosa"</span>, <span class="st">"versicolor"</span>, <span class="st">"virginica"</span>]</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>models <span class="op">=</span> {</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Sepal measurements"</span>: sepal_model,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Petal measurements"</span>: petal_model,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> []</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>confusion_matrices <span class="op">=</span> {}</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, model <span class="kw">in</span> models.items():</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    predictions <span class="op">=</span> model.predict(X_test)</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    results.append({</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Feature set"</span>: name,</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Best C"</span>: model.best_params_[<span class="st">"logisticregression__C"</span>],</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Mean CV accuracy"</span>: model.best_score_,</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Test accuracy"</span>: accuracy_score(y_test, predictions),</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>    matrix <span class="op">=</span> confusion_matrix(</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>        y_test,</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>        predictions,</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>        labels<span class="op">=</span>species_order,</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>    confusion_matrices[name] <span class="op">=</span> pd.DataFrame(</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>        matrix,</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>        index<span class="op">=</span>[<span class="ss">f"Actual </span><span class="sc">{</span>species<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> species <span class="kw">in</span> species_order],</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>        columns<span class="op">=</span>[<span class="ss">f"Predicted </span><span class="sc">{</span>species<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> species <span class="kw">in</span> species_order],</span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>results_df <span class="op">=</span> pd.DataFrame(results).<span class="bu">round</span>(<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The petal model performed better than the sepal model on this test split (Table 1). It correctly classified 29 of 30 flowers, compared with 23 of 30 for the sepal model. The confusion matrices show which species were misclassified (Tables 2 and 3).</p>
+<p><strong>Table 2. Cross-validation and test accuracy by feature set</strong></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Feature set</th>
+<th style="text-align: right;">Best C</th>
+<th style="text-align: right;">Mean CV accuracy</th>
+<th style="text-align: right;">Test accuracy</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Sepal measurements</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.833</td>
+<td style="text-align: right;">0.767</td>
+</tr>
+<tr class="even">
+<td>Petal measurements</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0.958</td>
+<td style="text-align: right;">0.967</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Table 3. Sepal model confusion matrix</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 26%">
+<col style="width: 26%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Actual speScies</th>
+<th style="text-align: right;">Predicted setosa</th>
+<th style="text-align: right;">Predicted versicolor</th>
+<th style="text-align: right;">Predicted virginica</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>setosa</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td>versicolor</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td>virginica</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">7</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Table 4. Petal model confusion matrix</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 26%">
+<col style="width: 26%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Actual species</th>
+<th style="text-align: right;">Predicted setosa</th>
+<th style="text-align: right;">Predicted versicolor</th>
+<th style="text-align: right;">Predicted virginica</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>setosa</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td>versicolor</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td>virginica</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">9</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="discussion" class="level1">
+<h1>Discussion</h1>
+<p>As we can see that, the petal model classify the Iris species more accurately than the sepal model. Since the petal model has 96.7 % test accuracy which is better than 76.7% test accuracy for the sepal model. Also, the confusion matrix shows that both models classify the Iris Setosa correctly. The petal model has only 1 incorrect prediction of Iris Virginica，while sepal model has 7 incorrect prediction of Iris Versicolour and Iris Virginica. Our result can enable scientists and even other people to know that in cases where measurement conditions are limited, and people wants to quickly classify the types of iris, measuring petal is more useful than measuring sepal. Also, it can save time and costs for researchers. Our finding meet what we expected to find, petal is more accurate than sepal. There are still many limitations in our research. Firstly, the dataset is quite small and only contains 150 Iris (50 for each of 3 Iris). The small size of data may cause the model to be inaccurate for the other unknown Iris. Secondly, we could also try other model but not only using Logistic Regression. If we try other model on the same data, we may have different results. Our finding may influence the steps and priorities that scientists choose for measurements before conducting experiments. There are some future questions this research could lead to. Is Logistic Regression the best predictive model? Can the accuracy be further improved by using another model? Besides petal and sepal, what other features can be used to classify Iris?</p>
+</section>
+<section id="references" class="level1">
+<h1>References</h1>
+<p>Anand. (2024, May 28). ML intro : Iris dataset. DEV Community. https://dev.to/kammarianand/ml-intro-iris-dataset-4e13</p>
+<p>Bezdek, J. C., Keller, J. M., Krishnapuram, R., Kuncheva, L. I., &amp; Pal, N. R. (1999). Will the real iris data please stand up? IEEE Transactions on Fuzzy Systems, 7(3), 368-369. https://doi.org/10.1109/91.771092</p>
+<p>Fisher, R. (1936). Iris [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C56C76.</p>
+<p>Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel, O., Blondel, M., Prettenhofer, P., Weiss, R., Dubourg, V., Vanderplas, J., Passos, A., Cournapeau, D., Brucher, M., Perrot, M., &amp; Duchesnay, E. (2011). Scikit-learn: Machine learning in Python. Journal of Machine Learning Research, 12, 2825–2830.</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
