@@ -3,6 +3,9 @@ title: "Predicting Iris species from sepal and petal information"
 author: "Ramandeep Kaur, Peter Kim, Jiaqi Feng, Carine Ishimwe"
 date: "2026/11/20"
 jupyter: python3
+format:
+  html:
+    embed-resources: true
 ---
 
 ```{python}
