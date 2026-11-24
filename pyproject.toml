@@ -12,3 +12,7 @@ dependencies = [
     "scikit-learn>=1.9.1",
     "vl-convert-python>=1.9.0.post1",
 ]
+
+[tool.uv]
+# `uv add` writes an exact version (==)
+add-bounds = "exact"
