@@ -11,7 +11,7 @@ DSCI 522: Milestone 1 project repository
 
 ## Summary
 
-We analyse the Iris dataset from the UCI Machine Learning Repository to answer the question: "Are sepal measurements or petal measurements better for predicting the species of an iris flower?" We compare two logistic regression models: one uses petal length and width, and the other uses sepal length and width. For a fair comparison, both models use the same training and test sets. We compare their accuracy and confusion matrices and find that the petal model predicts species more accurately than the sepal model (96.7% vs 76.7% test accuracy). This suggests that researchers who are short on time in the field could measure petals alone and still identify iris species reliably, although our data set is small and we tested only one type of model.
+We analyse the Iris dataset from the UCI Machine Learning Repository to answer the question: “Are sepal measurements or petal measurements better for predicting the species of an iris flower?” We compare two logistic regression models: one uses petal length and width, and the other uses sepal length and width. For a fair comparison, both models use the same training and test sets. We compare their accuracy and confusion matrices and find that the petal model predicts species more accurately than the sepal model (96.7% vs 76.7% test accuracy). This suggests that researchers who are short on time in the field could measure petals alone and still identify iris species reliably, although our data set is small and we tested only one type of model.
 
 ## Rendered report
 
@@ -19,58 +19,44 @@ View the rendered report at <https://ubc-mds-2026-27.github.io/DSCI_522_Group_33
 
 ## How to run the analysis
 
-Follow these steps to reproduce the analysis.
+Run these commands from the root of the repository. Docker must be installed and running.
 
-### Installation requirements
-
-1. Quarto 1.10.18
-2. uv 0.12.7
-3. The required Python packages are recorded in `uv.lock`.
-
-### Steps
-
-Run the following commands in a terminal:
-
-1. Move to the folder where you want the project:
+1. If you do not already have an SSH key, create one on your computer:
 
    ```bash
-   cd path/to/folder
+   ssh-keygen -t ed25519
    ```
 
-2. Clone the repository and move into it:
+   Press Enter at each prompt.
+
+2. Download the project image:
 
    ```bash
-   git clone https://github.com/UBC-MDS-2026-27/DSCI_522_Group_33_project-compare-iris-predictions.git
-   cd DSCI_522_Group_33_project-compare-iris-predictions
+   docker compose pull
    ```
 
-3. Install the dependencies:
+3. Render the report in the container:
 
    ```bash
-   uv sync
+   docker compose run --rm analysis-env uv run quarto render analysis/predict-iris-classification.qmd
    ```
 
-4. Render the report:
+   The rendered report is saved as `analysis/predict-iris-classification.html`.
 
-   ```bash
-   uv run quarto render analysis/predict-iris-classification.qmd --to html
-   ```
+The `--rm` option removes the one-off container when rendering finishes.
 
-5. Open `analysis/predict-iris-classification.html` in a browser.
+For instructions on changing the project, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Dependencies
 
-- [uv](https://docs.astral.sh/uv/) 0.12.7, for managing the Python environment
-- [Quarto](https://quarto.org/docs/get-started/) 1.10.18, for rendering the report (install it separately; `uv sync` does not install the Quarto program)
-- Python 3.14 (uv installs it automatically)
-- Python packages: altair, ipython, jupyterlab, numpy, pandas, scikit-learn and vl-convert-python
-
-The full list of packages and versions is in [`pyproject.toml`](pyproject.toml) and [`uv.lock`](uv.lock).
+The project environment runs in the Docker image configured by `Dockerfile` and `docker-compose.yml`. Python package versions are recorded in `pyproject.toml` and `uv.lock`.
 
 ## Licenses
 
-The project code is licensed under the MIT License.  
-The analysis report is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0) License.  
+The project code is licensed under the MIT License.
+
+The analysis report is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0) License.
+
 The Iris dataset is licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) License.
 
 See [LICENSE.md](LICENSE.md) for details.
