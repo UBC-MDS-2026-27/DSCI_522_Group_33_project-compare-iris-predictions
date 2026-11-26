@@ -1,6 +1,6 @@
 # Iris Species Classification Model
 
-DSCI 522: Milestone 1 project repository
+DSCI 522: Comparing Iris predictions
 
 ## Authors
 
@@ -18,6 +18,19 @@ We analyse the Iris dataset from the UCI Machine Learning Repository to answer t
 View the rendered report at <https://ubc-mds-2026-27.github.io/DSCI_522_Group_33_project-compare-iris-predictions/>.
 
 ## How to run the analysis
+
+We run the analysis in a Docker container, so everyone uses the same software and package versions. The image is published on Docker Hub at <https://hub.docker.com/r/lsfe79/dsci_522_group_33_project-compare-iris-predictions>.
+
+### Setup
+
+First time running the project,
+install and launch [Docker](https://www.docker.com/get-started/),
+then clone this repository and move into it:
+
+``` bash
+git clone https://github.com/UBC-MDS-2026-27/DSCI_522_Group_33_project-compare-iris-predictions.git
+cd DSCI_522_Group_33_project-compare-iris-predictions
+```
 
 Run these commands from the root of the repository. Docker must be installed and running.
 
@@ -41,15 +54,17 @@ Run these commands from the root of the repository. Docker must be installed and
    docker compose run --rm analysis-env uv run quarto render analysis/predict-iris-classification.qmd
    ```
 
-   The rendered report is saved as `analysis/predict-iris-classification.html`.
+   The rendered report is written to `analysis/predict-iris-classification.html`.
 
 The `--rm` option removes the one-off container when rendering finishes.
+
+## Contributing 
 
 For instructions on changing the project, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Dependencies
 
-The project environment runs in the Docker image configured by `Dockerfile` and `docker-compose.yml`. Python package versions are recorded in `pyproject.toml` and `uv.lock`.
+The project environment runs in the Docker image configured by [`Dockerfile`](Dockerfile) and `docker-compose.yml`. Python package versions are recorded in [`pyproject.toml`](pyproject.toml) and [`uv.lock`](uv.lock).
 
 ## Licenses
 
