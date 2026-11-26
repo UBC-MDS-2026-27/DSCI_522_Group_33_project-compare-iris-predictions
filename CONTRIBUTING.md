@@ -22,7 +22,7 @@ a bug, create an associated issue and illustrate the bug with a minimal
 
 We develop in the same Docker container that users run the analysis in,
 so everyone uses the same software and package versions.
-First follow the [Usage section of the README](README.md#usage)
+First follow the [How to run the analysis section of the README](README.md#How to run the analysis)
 (install Docker, clone the repository, make an ssh key, and download the image).
 Run all the commands below from the root of this repository.
 
@@ -38,7 +38,7 @@ so a file you change there changes on your computer too.
 1. Install [Positron](https://positron.posit.co/download.html) on your computer.
    Its **Remote SSH** feature, which connects to the container, comes built in,
    so you don't need to install an extension.
-2. Make sure you followed the [Usage section of the README](README.md#usage):
+2. Make sure you followed the [How to run the analysis section of the README](README.md#How to run the analysis):
    you have an ssh key at `~/.ssh/id_ed25519.pub` and you ran `docker compose pull`.
 3. Check that Git knows who you are on your computer:
 
@@ -111,7 +111,7 @@ so a file you change there changes on your computer too.
 
 * **`~/.ssh/id_ed25519.pub` is a folder:** Docker made it because the key didn't exist yet.
   Run `docker compose down`, delete that folder, make the key
-  (see the [README](README.md#usage)), and start again.
+  (see the [README](README.md#How to run the analysis)), and start again.
 * **`~/.gitconfig` is a folder, or Git in the container doesn't know your name:**
   the same thing happened with your Git settings.
   Run `docker compose down`, delete that folder, set your name and email (see above), and start again.
