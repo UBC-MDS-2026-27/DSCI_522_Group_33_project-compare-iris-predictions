@@ -2,7 +2,7 @@
 # https://github.com/chendaniely/docker-uv-renv
 
 # Start from Ubuntu Linux (this image also has R, which you can ignore).
-FROM rocker/r-ver:4.6.2
+FROM ubuntu:24.04
 
 # Install the programs the project needs:
 # curl downloads files, git/less/nano let you work in a terminal,
