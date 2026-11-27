@@ -48,7 +48,7 @@ Run these commands from the root of the repository. Docker must be installed and
    docker compose pull
    ```
 
-3. Render the report in the container:
+3. Run the analysis and render the report:
 
    ```bash
    docker compose run --rm analysis-env uv run quarto render analysis/predict-iris-classification.qmd
