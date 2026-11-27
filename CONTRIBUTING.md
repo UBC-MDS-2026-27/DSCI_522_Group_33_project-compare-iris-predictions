@@ -75,7 +75,7 @@ so a file you change there changes on your computer too.
 4. Type `root@localhost:2222` and press Enter. A new Positron window opens.
    * If it asks for the platform of the remote host, pick **Linux**.
    * If it asks whether you trust the host (a "fingerprint"), click **Continue**.
-   * The first time, Positron installs its server inside the container. This takes a few minutes (e.g., this takes > 5 minutes on Sky's computer).
+   * The first time, Positron installs its server inside the container. This takes a few minutes.
 5. **Open the project folder.**
    The bottom left corner now shows `SSH: localhost:2222`,
    but the Explorer says **No folder opened** and the terminal starts in `/root`,
@@ -88,7 +88,7 @@ so a file you change there changes on your computer too.
      The **Running Interpreter Sessions** menu only lists sessions that are already running
      (such as `/usr/bin/python3`, the container's system Python: not this one).
    * Click **New Console Session...** and pick
-     **Python 3.x (uv: dsci-522-project-template-breast-cancer-predictor)**,
+     **Python 3.14.x (uv: dsci-522-group-33)**,
      with the path `/opt/venv/bin/python`. This is the environment built from `uv.lock`.
    * If it isn't in the list, run **Python: Select Interpreter** from the Command Palette,
      choose **Enter interpreter path...** and type `/opt/venv/bin/python`.
@@ -134,7 +134,7 @@ More detail: [Working in a container over ssh with Positron](https://ubc-dsci.gi
 To re-run the analysis and render the report without opening the container:
 
 ``` bash
-docker compose run --rm analysis-env uv run quarto render
+docker compose run --rm analysis-env uv run quarto render analysis/predict-iris-classification.qmd
 ```
 
 ### Adding or updating a package
@@ -171,8 +171,8 @@ cp analysis/predict-iris-classification.html docs/index.html
 - Give the branch a short name that describes the work,
   for example `fix-readme-typo` or `add-eda-figure`.
 - Keep each branch small: one independent piece of work per branch.
-- Before opening the PR, render the report
-  (`uv run quarto render analysis/predict-iris-classification.qmd`)
+- Before opening the PR, render the report in the container
+  (`docker compose run --rm analysis-env uv run quarto render analysis/predict-iris-classification.qmd`)
   to check that the analysis still runs from start to finish.
 - Open a PR into `main` and describe what changed and why.
   Link the related issue (e.g., "Closes #12").
